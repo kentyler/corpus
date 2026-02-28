@@ -1,0 +1,5 @@
+node_modules/
+secrets.json
+.shadow-cljs/
+ui/resources/public/js/
+.nrepl-port

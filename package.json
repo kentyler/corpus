@@ -1,0 +1,9 @@
+{
+  "name": "corpus",
+  "version": "0.1.0",
+  "description": "An append-only corpus with multi-model LLM integration",
+  "scripts": {
+    "start": "cd server && node index.js",
+    "test": "cd server && npx jest --forceExit"
+  }
+}
