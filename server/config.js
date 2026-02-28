@@ -13,21 +13,25 @@ const isWSL = process.platform === 'linux' &&
 // Default host: Windows host IP from WSL, or localhost on Windows
 const defaultHost = isWSL ? '10.255.255.254' : '127.0.0.1';
 
-module.exports = {
-  // Database connection
-  // Override with DATABASE_URL or individual PG* environment variables
-  database: {
-    connectionString: process.env.DATABASE_URL ||
-      `postgresql://${process.env.PGUSER || 'postgres'}:${process.env.PGPASSWORD || ''}@${process.env.PGHOST || defaultHost}:${process.env.PGPORT || '5432'}/${process.env.PGDATABASE || 'corpus'}`,
+module.exports = function(secrets) {
+  const pgPassword = process.env.PGPASSWORD || secrets?.database?.password || '';
 
-    // Pool settings
-    max: 10,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-  },
+  return {
+    // Database connection
+    // Override with DATABASE_URL or individual PG* environment variables
+    database: {
+      connectionString: process.env.DATABASE_URL ||
+        `postgresql://${process.env.PGUSER || 'postgres'}:${pgPassword}@${process.env.PGHOST || defaultHost}:${process.env.PGPORT || '5432'}/${process.env.PGDATABASE || 'corpus'}`,
 
-  // Server settings
-  server: {
-    port: process.env.PORT || 3001,
-  }
+      // Pool settings
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000,
+    },
+
+    // Server settings
+    server: {
+      port: process.env.PORT || 3002,
+    }
+  };
 };
